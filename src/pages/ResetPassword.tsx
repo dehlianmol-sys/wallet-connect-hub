@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from '@/lib/router-compat';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/lib/toast';
+import AuthHints, { phoneRules, passwordRules, isInvalid } from '@/components/AuthHints';
 import { generateOtp, sendOtpSms } from '@/lib/otp';
 
 const OTP_RATE_PREFIX = 'hk_reset_otp_rate_';
@@ -121,25 +122,31 @@ export default function ResetPassword() {
       </header>
       <form className="hk-auth-form" onSubmit={submit} noValidate>
         <div className="hk-fields">
-          <div className="hk-input-shell hk-phone-shell">
+          <div>
+          <div className={`hk-input-shell hk-phone-shell${isInvalid(phone, phoneRules(phone)) ? ' cp-invalid' : ''}`}>
             <svg className="hk-field-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16.4v3a2 2 0 0 1-2.2 2A19.7 19.7 0 0 1 2.6 5.2 2 2 0 0 1 4.6 3h3l2 5-2.2 2.2a15 15 0 0 0 6.4 6.4L16 14.4z" /></svg>
             <span className="hk-prefix">+91</span>
             <input value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} type="tel" inputMode="numeric" autoComplete="tel-national" placeholder="Phone" required />
           </div>
-          <div className="hk-input-shell">
+          <AuthHints value={phone} rules={phoneRules(phone)} />
+          </div>
+          <div>
+          <div className={`hk-input-shell${isInvalid(password, passwordRules(password)) ? ' cp-invalid' : ''}`}>
             <svg className="hk-field-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="12" rx="1" /><path d="M7 10V6a5 5 0 0 1 10 0v4M12 15v3" /></svg>
             <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" autoComplete="new-password" placeholder="New Password" minLength={6} required />
+          </div>
+          <AuthHints value={password} rules={passwordRules(password)} />
           </div>
           <div className="hk-input-shell hk-otp-shell">
             <svg className="hk-field-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4.5h20v15H2zM2 5l10 7L22 5" /></svg>
             <input value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} inputMode="numeric" autoComplete="one-time-code" placeholder="OTP Code" required />
-            <button className="hk-send" type="button" onClick={sendOtp} disabled={loading || cooldown > 0}>
+            <button className={`hk-send${/^\d{10}$/.test(phone) && cooldown <= 0 ? ' cp-ready' : ''}`} type="button" onClick={sendOtp} disabled={loading || cooldown > 0}>
               {cooldown > 0 ? `${cooldown}s` : 'Send'}
             </button>
           </div>
         </div>
         <button className="hk-primary" type="submit" disabled={loading}>
-          {loading ? 'Please wait…' : 'Reset Password'}
+          {loading ? <span className="cp-spin" /> : 'Reset Password'}
         </button>
         {status && <p className="hk-status">{status}</p>}
       </form>
