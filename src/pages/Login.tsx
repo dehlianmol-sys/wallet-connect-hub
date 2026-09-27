@@ -76,11 +76,11 @@ export default function Login({ showSplash = false }: { showSplash?: boolean }) 
           <label><input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} /> Remember Me</label>
         </div>
         <label className="hk-agreement"><input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} /> Agree<span>"User Privacy Agreement"</span></label>
-        <button className="hk-primary" type="submit" disabled={loading}>{loading ? <span className="cp-spin" /> : 'Sign In'}</button>
+        <button className="hk-primary" type="submit" disabled={loading}>Sign In</button>
         <div className="hk-forgot"><Link to="/forgot-password">Forget Password</Link></div>
       </form>
       <span className="hk-version">v1.2.1</span>
-      {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading</span></div></div>}
+      {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading...</span></div></div>}
     </main>
   );
 }

@@ -154,11 +154,11 @@ export default function ResetPassword() {
           </div>
         </div>
         <button className="hk-primary" type="submit" disabled={loading}>
-          {loading ? <span className="cp-spin" /> : 'Reset Password'}
+          Reset Password
         </button>
       </form>
       <SecurityVerify open={verifyOpen} onClose={() => setVerifyOpen(false)} onVerified={() => { setVerifyOpen(false); void sendOtp(); }} />
-      {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading</span></div></div>}
+      {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading...</span></div></div>}
     </main>
   );
 }
