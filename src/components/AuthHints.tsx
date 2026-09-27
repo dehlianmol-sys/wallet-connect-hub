@@ -1,3 +1,9 @@
+export function usernameRules(v: string) {
+  return [
+    { ok: /^[A-Za-z0-9_]*$/.test(v), text: 'Only letters, numbers, and underscores' },
+    { ok: v.length >= 5 && v.length <= 12, text: `Length 5–12 (${v.length}/12)` },
+  ];
+}
 export function phoneRules(v: string) {
   return [
     { ok: /^\d*$/.test(v), text: 'Digits only (0–9)' },

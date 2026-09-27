@@ -45,16 +45,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           pointer-events: none;
         }
         .hk-toast {
-          width: min(360px, calc(100vw - 48px));
-          padding: 15px 20px;
-          border-radius: 10px;
+          max-width: min(280px, calc(100vw - 48px));
+          padding: 10px 16px;
+          border-radius: 8px;
           color: #fff;
-          background: rgba(55, 55, 55, .92);
+          background: rgba(40, 40, 40, .82);
           box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
-          font-size: 19px;
-          font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-          font-weight: 500;
-          line-height: 1.25;
+          font-size: 14px;
+          font-family: "Source Sans 3", Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+          font-weight: 400;
+          line-height: 1.3;
           text-align: center;
           animation: hk-toast-in .2s ease;
         }

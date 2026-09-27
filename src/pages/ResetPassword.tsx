@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useToast } from '@/lib/toast';
 import AuthHints, { phoneRules, passwordRules, isInvalid } from '@/components/AuthHints';
 import { generateOtp, sendOtpSms } from '@/lib/otp';
+import SecurityVerify from '@/components/SecurityVerify';
 
 const OTP_RATE_PREFIX = 'hk_reset_otp_rate_';
 
@@ -29,7 +30,7 @@ export default function ResetPassword() {
   const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
   const [sentOtp, setSentOtp] = useState('');
-  const [status, setStatus] = useState('');
+  const [, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -49,6 +50,13 @@ export default function ResetPassword() {
   const fail = (message: string) => {
     setStatus(message);
     toast(message, 'error');
+  };
+
+  const [verifyOpen, setVerifyOpen] = useState(false);
+  const requestOtp = () => {
+    if (loading || cooldown > 0) return;
+    if (!/^\d{10}$/.test(phone)) return fail('Enter a 10-digit phone number.');
+    setVerifyOpen(true);
   };
 
   const sendOtp = async () => {
@@ -140,7 +148,7 @@ export default function ResetPassword() {
           <div className="hk-input-shell hk-otp-shell">
             <svg className="hk-field-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4.5h20v15H2zM2 5l10 7L22 5" /></svg>
             <input value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} inputMode="numeric" autoComplete="one-time-code" placeholder="OTP Code" required />
-            <button className={`hk-send${/^\d{10}$/.test(phone) && cooldown <= 0 ? ' cp-ready' : ''}`} type="button" onClick={sendOtp} disabled={loading || cooldown > 0}>
+            <button className={`hk-send${/^\d{10}$/.test(phone) && cooldown <= 0 ? ' cp-ready' : ''}`} type="button" onClick={requestOtp} disabled={loading || cooldown > 0}>
               {cooldown > 0 ? `${cooldown}s` : 'Send'}
             </button>
           </div>
@@ -148,8 +156,9 @@ export default function ResetPassword() {
         <button className="hk-primary" type="submit" disabled={loading}>
           {loading ? <span className="cp-spin" /> : 'Reset Password'}
         </button>
-        {status && <p className="hk-status">{status}</p>}
       </form>
+      <SecurityVerify open={verifyOpen} onClose={() => setVerifyOpen(false)} onVerified={() => { setVerifyOpen(false); void sendOtp(); }} />
+      {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading</span></div></div>}
     </main>
   );
 }

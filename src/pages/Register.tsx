@@ -3,9 +3,10 @@ import { Link, useLocation, useNavigate } from '@/lib/router-compat';
 import { phoneToAuthEmail, supabase } from '@/lib/supabase';
 import { useStore } from '@/lib/store';
 import { useToast } from '@/lib/toast';
-import AuthHints, { phoneRules, passwordRules, isInvalid } from '@/components/AuthHints';
+import AuthHints, { usernameRules, phoneRules, passwordRules, isInvalid } from '@/components/AuthHints';
 import { normalizeRefCode, REF_CODE_KEY } from '@/lib/referral';
 import { generateOtp, sendOtpSms } from '@/lib/otp';
+import SecurityVerify from '@/components/SecurityVerify';
 
 const OTP_RATE_PREFIX = 'hk_otp_rate_';
 
@@ -69,7 +70,15 @@ export default function Register({ referralCode }: { referralCode?: string } = {
 
   const fail = (message: string) => {
     setError(message);
-    toast(message, 'error');
+  };
+
+  const [verifyOpen, setVerifyOpen] = useState(false);
+  useEffect(() => { if (error) { toast(error, 'error'); setError(''); } }, [error]);
+  const requestOtp = () => {
+    if (loading || cooldown > 0) return;
+    const invalid = validateBase();
+    if (invalid) return fail(invalid);
+    setVerifyOpen(true);
   };
 
   const sendOtp = async () => {
@@ -145,18 +154,18 @@ export default function Register({ referralCode }: { referralCode?: string } = {
       </header>
       <form className="hk-auth-form" onSubmit={submit} noValidate>
         <div className="hk-fields">
-          <AuthInput icon="user" value={username} onChange={setUsername} placeholder="User Name" maxLength={12} />
+          <AuthInput icon="user" value={username} onChange={setUsername} placeholder="User Name" maxLength={12} rules={usernameRules(username)} />
           <AuthInput icon="lock" value={password} onChange={setPassword} placeholder="Password" type="password" maxLength={72} rules={passwordRules(password)} />
           <AuthInput icon="phone" value={phone} onChange={(value) => setPhone(value.replace(/\D/g, '').slice(0, 10))} placeholder="Phone" prefix="+91" maxLength={10} rules={phoneRules(phone)} />
           <div className="hk-input-shell hk-otp-shell">
             <FieldIcon type="otp" /><input value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} inputMode="numeric" autoComplete="one-time-code" placeholder="OTP Code" maxLength={6} />
-            <button className={`hk-send${/^\d{10}$/.test(phone) && cooldown <= 0 ? ' cp-ready' : ''}`} type="button" onClick={sendOtp} disabled={loading || cooldown > 0}>{cooldown > 0 ? `${cooldown}s` : 'Send'}</button>
+            <button className={`hk-send${/^\d{10}$/.test(phone) && cooldown <= 0 ? ' cp-ready' : ''}`} type="button" onClick={requestOtp} disabled={loading || cooldown > 0}>{cooldown > 0 ? `${cooldown}s` : 'Send'}</button>
           </div>
           <AuthInput icon="invite" value={inviteCode} onChange={(value) => setInviteCode(value.replace(/[^A-Za-z0-9]/g, '').slice(0, 20))} placeholder="Invite Code" maxLength={20} />
         </div>
-        {error && <p className="hk-error">{error}</p>}
         <button className="hk-primary" type="submit" disabled={loading}>{loading ? <span className="cp-spin" /> : 'Sign Up'}</button>
       </form>
+      <SecurityVerify open={verifyOpen} onClose={() => setVerifyOpen(false)} onVerified={() => { setVerifyOpen(false); void sendOtp(); }} />
       {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading</span></div></div>}
     </main>
   );
@@ -173,7 +182,7 @@ function FieldIcon({ type }: { type: 'user' | 'lock' | 'phone' | 'otp' | 'invite
     lock: <><rect x="4" y="10" width="16" height="12" rx="1"/><path d="M7 10V6a5 5 0 0 1 10 0v4M12 15v3"/></>,
     phone: <path d="M21 16.4v3a2 2 0 0 1-2.2 2A19.7 19.7 0 0 1 2.6 5.2 2 2 0 0 1 4.6 3h3l2 5-2.2 2.2a15 15 0 0 0 6.4 6.4L16 14.4z"/>,
     otp: <path d="M2 4.5h20v15H2zM2 5l10 7L22 5"/>,
-    invite: <path d="m10 13 4-4M8.5 15.5l-3-3a4.25 4.25 0 0 1 6-6l3 3a4.25 4.25 0 0 1 0 6M15.5 8.5l3 3a4.25 4.25 0 0 1-6 6l-3-3a4.25 4.25 0 0 1 0-6"/>,
+    invite: <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>,
   };
   return <svg className="hk-field-icon" viewBox="0 0 24 24" aria-hidden="true">{paths[type]}</svg>;
 }
