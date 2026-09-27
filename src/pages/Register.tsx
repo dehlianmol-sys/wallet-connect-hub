@@ -163,10 +163,10 @@ export default function Register({ referralCode }: { referralCode?: string } = {
           </div>
           <AuthInput icon="invite" value={inviteCode} onChange={(value) => setInviteCode(value.replace(/[^A-Za-z0-9]/g, '').slice(0, 20))} placeholder="Invite Code" maxLength={20} />
         </div>
-        <button className="hk-primary" type="submit" disabled={loading}>{loading ? <span className="cp-spin" /> : 'Sign Up'}</button>
+        <button className="hk-primary" type="submit" disabled={loading}>Sign Up</button>
       </form>
       <SecurityVerify open={verifyOpen} onClose={() => setVerifyOpen(false)} onVerified={() => { setVerifyOpen(false); void sendOtp(); }} />
-      {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading</span></div></div>}
+      {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading...</span></div></div>}
     </main>
   );
 }

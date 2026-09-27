@@ -4,7 +4,7 @@ declare global {
   interface Window { turnstile?: { render: (el: HTMLElement, opts: Record<string, unknown>) => string; remove: (id: string) => void } }
 }
 
-// Cloudflare Turnstile site key (public). Test key always passes; replace with your own key.
+// Cloudflare Turnstile site key (public). Set VITE_TURNSTILE_SITE_KEY to your Cloudflare site key.
 const SITE_KEY = (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) || '1x00000000000000000000AA';
 const SCRIPT = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 
