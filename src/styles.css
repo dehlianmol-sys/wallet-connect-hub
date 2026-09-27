@@ -1,6 +1,9 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import "@fontsource/source-sans-3/400.css";
+@import "@fontsource/source-sans-3/600.css";
+@import "@fontsource/source-sans-3/700.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -968,6 +971,16 @@ button,
 .hk-auth .hk-auth-back svg { width:24px; height:24px; stroke-width:2; }
 .cp-spin { width:22px; height:22px; border:2px solid rgb(255 255 255 / 35%); border-top-color:#fff; border-radius:50%; animation:hk-spin .8s linear infinite; }
 .hk-auth .hk-agreement span { margin-left:-6px; }
-.hk-auth .hk-auth-header { align-items:end; padding-bottom:9px; }
-.hk-auth .hk-auth-header h1 { line-height:28px; }
-.hk-auth .hk-auth-back { height:28px; }
+.hk-auth .hk-auth-header { height:auto; min-height:0; padding:calc(env(safe-area-inset-top, 0px) + 6px) 4px 6px; align-items:center; }
+.hk-auth .hk-auth-header h1 { line-height:34px; }
+.hk-auth .hk-auth-back { height:40px; }
+.hk-auth .hk-loading-box { width:112px; height:92px; gap:10px; border-radius:8px; background:rgb(40 40 40 / 82%); font-family:"Source Sans 3",sans-serif; font-size:14px; font-weight:400; }
+.hk-auth .hk-mini-spinner { width:28px; height:28px; }
+.cp-verify-layer { position:fixed; inset:0; z-index:60; display:grid; place-items:center; padding:0 24px; background:rgb(0 0 0 / 45%); font-family:"Source Sans 3",sans-serif; }
+.cp-verify { position:relative; width:min(340px,100%); padding:26px 18px 30px; border-radius:18px; background:#fff; text-align:center; }
+.cp-verify h2 { margin:0; color:#1F2430; font-size:19px; font-weight:600; }
+.cp-verify p { margin:10px 0 0; color:#6B7280; font-size:14px; }
+.cp-verify-widget { display:flex; justify-content:center; min-height:65px; margin-top:22px; }
+.cp-verify .cp-verify-note { margin-top:18px; color:#8D97A5; font-size:13px; }
+.cp-verify-close { position:absolute; top:14px; right:14px; width:30px; height:30px; display:grid; place-items:center; border:0; background:transparent; color:#4B5563; }
+.cp-verify-close svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; }

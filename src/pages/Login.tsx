@@ -46,6 +46,8 @@ export default function Login({ showSplash = false }: { showSplash?: boolean }) 
     }
   };
 
+  useEffect(() => { if (error) toast(error, 'error'); }, [error]);
+
   if (splash) return <AppSplash />;
 
   return (
@@ -74,7 +76,6 @@ export default function Login({ showSplash = false }: { showSplash?: boolean }) 
           <label><input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} /> Remember Me</label>
         </div>
         <label className="hk-agreement"><input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} /> Agree<span>"User Privacy Agreement"</span></label>
-        {error && <p className="hk-error">{error}</p>}
         <button className="hk-primary" type="submit" disabled={loading}>{loading ? <span className="cp-spin" /> : 'Sign In'}</button>
         <div className="hk-forgot"><Link to="/forgot-password">Forget Password</Link></div>
       </form>
