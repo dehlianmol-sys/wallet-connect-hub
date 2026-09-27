@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from '@/lib/router-compat';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/lib/toast';
+import AuthHints, { phoneRules, passwordRules, isInvalid } from '@/components/AuthHints';
 import { generateOtp, sendOtpSms } from '@/lib/otp';
 
 const OTP_RATE_PREFIX = 'hk_reset_otp_rate_';
@@ -133,13 +134,13 @@ export default function ResetPassword() {
           <div className="hk-input-shell hk-otp-shell">
             <svg className="hk-field-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4.5h20v15H2zM2 5l10 7L22 5" /></svg>
             <input value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} inputMode="numeric" autoComplete="one-time-code" placeholder="OTP Code" required />
-            <button className="hk-send" type="button" onClick={sendOtp} disabled={loading || cooldown > 0}>
+            <button className={`hk-send${/^\d{10}$/.test(phone) && cooldown <= 0 ? ' cp-ready' : ''}`} type="button" onClick={sendOtp} disabled={loading || cooldown > 0}>
               {cooldown > 0 ? `${cooldown}s` : 'Send'}
             </button>
           </div>
         </div>
         <button className="hk-primary" type="submit" disabled={loading}>
-          {loading ? 'Please wait…' : 'Reset Password'}
+          {loading ? <span className="cp-spin" /> : 'Reset Password'}
         </button>
         {status && <p className="hk-status">{status}</p>}
       </form>

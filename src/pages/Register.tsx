@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from '@/lib/router-compat';
 import { phoneToAuthEmail, supabase } from '@/lib/supabase';
 import { useStore } from '@/lib/store';
 import { useToast } from '@/lib/toast';
+import AuthHints, { phoneRules, passwordRules, isInvalid } from '@/components/AuthHints';
 import { normalizeRefCode, REF_CODE_KEY } from '@/lib/referral';
 import { generateOtp, sendOtpSms } from '@/lib/otp';
 
@@ -149,12 +150,12 @@ export default function Register({ referralCode }: { referralCode?: string } = {
           <AuthInput icon="phone" value={phone} onChange={(value) => setPhone(value.replace(/\D/g, '').slice(0, 10))} placeholder="Phone" prefix="+91" maxLength={10} />
           <div className="hk-input-shell hk-otp-shell">
             <FieldIcon type="otp" /><input value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} inputMode="numeric" autoComplete="one-time-code" placeholder="OTP Code" maxLength={6} />
-            <button className="hk-send" type="button" onClick={sendOtp} disabled={loading || cooldown > 0}>{cooldown > 0 ? `${cooldown}s` : otpSent ? 'Resend' : 'Send'}</button>
+            <button className={`hk-send${/^\d{10}$/.test(phone) && cooldown <= 0 ? ' cp-ready' : ''}`} type="button" onClick={sendOtp} disabled={loading || cooldown > 0}>{cooldown > 0 ? `${cooldown}s` : 'Send'}</button>
           </div>
-          <AuthInput icon="invite" value={inviteCode} onChange={(value) => setInviteCode(value.replace(/[^A-Za-z0-9]/g, '').slice(0, 20))} placeholder="Invitation Code" maxLength={20} />
+          <AuthInput icon="invite" value={inviteCode} onChange={(value) => setInviteCode(value.replace(/[^A-Za-z0-9]/g, '').slice(0, 20))} placeholder="Invite Code" maxLength={20} />
         </div>
         {error && <p className="hk-error">{error}</p>}
-        <button className="hk-primary" type="submit" disabled={loading}>{loading ? 'Loading' : 'Sign Up'}</button>
+        <button className="hk-primary" type="submit" disabled={loading}>{loading ? <span className="cp-spin" /> : 'Sign Up'}</button>
       </form>
       {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading</span></div></div>}
     </main>
