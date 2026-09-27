@@ -984,3 +984,4 @@ button,
 .cp-verify .cp-verify-note { margin-top:18px; color:#8D97A5; font-size:13px; }
 .cp-verify-close { position:absolute; top:14px; right:14px; width:30px; height:30px; display:grid; place-items:center; border:0; background:transparent; color:#4B5563; }
 .cp-verify-close svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; }
+.hk-auth .hk-input-shell input[type=password]:not(:placeholder-shown) { letter-spacing:6px; }
