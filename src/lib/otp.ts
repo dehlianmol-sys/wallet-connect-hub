@@ -21,12 +21,13 @@ export async function sendOtpSms(
   phone: string,
   otp: string,
   senderType: OtpSenderType,
+  turnstileToken?: string,
 ): Promise<{ ok: boolean; error?: string }> {
   try {
     const response = await fetch('/api/public/send-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, otp, senderType }),
+      body: JSON.stringify({ phone, otp, senderType, turnstileToken }),
     });
     const data = (await response.json().catch(() => null)) as
       | { success?: boolean; error?: string }

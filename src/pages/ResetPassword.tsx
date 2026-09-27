@@ -59,8 +59,9 @@ export default function ResetPassword() {
     setVerifyOpen(true);
   };
 
-  const sendOtp = async () => {
+  const sendOtp = async (turnstileToken?: string) => {
     if (loading || cooldown > 0) return;
+    if (!turnstileToken) return fail('Please complete the security verification.');
     setStatus('');
     if (!/^\d{10}$/.test(phone)) return fail('Enter a 10-digit phone number.');
     const remaining = cooldownRemaining(phone);
@@ -73,7 +74,7 @@ export default function ResetPassword() {
 
       const generated = generateOtp();
       // Forgot password template (GUERAR).
-      const result = await sendOtpSms(phone, generated, 'GUERAR');
+      const result = await sendOtpSms(phone, generated, 'GUERAR', turnstileToken);
       if (!result.ok) return fail(result.error ?? 'Could not send OTP. Please try again.');
 
       const previous = readOtpRate(phone);
@@ -157,7 +158,7 @@ export default function ResetPassword() {
           Reset Password
         </button>
       </form>
-      <SecurityVerify open={verifyOpen} onClose={() => setVerifyOpen(false)} onVerified={() => { setVerifyOpen(false); void sendOtp(); }} />
+      <SecurityVerify open={verifyOpen} onClose={() => setVerifyOpen(false)} onVerified={(token) => { setVerifyOpen(false); void sendOtp(token); }} />
       {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading...</span></div></div>}
     </main>
   );

@@ -81,8 +81,9 @@ export default function Register({ referralCode }: { referralCode?: string } = {
     setVerifyOpen(true);
   };
 
-  const sendOtp = async () => {
+  const sendOtp = async (turnstileToken?: string) => {
     if (loading || cooldown > 0) return;
+    if (!turnstileToken) return fail('Please complete the security verification.');
     setError('');
     const invalid = validateBase();
     if (invalid) return fail(invalid);
@@ -94,7 +95,7 @@ export default function Register({ referralCode }: { referralCode?: string } = {
       if (existing) return fail('Phone number already registered.');
       const generated = generateOtp();
       // Registration template (FYDBZR) via this app's own /api/public/send-otp endpoint.
-      const result = await sendOtpSms(phone, generated, 'FYDBZR');
+      const result = await sendOtpSms(phone, generated, 'FYDBZR', turnstileToken);
       if (!result.ok) {
         return fail(result.error ?? 'Could not send OTP. Please try again.');
       }
@@ -165,7 +166,7 @@ export default function Register({ referralCode }: { referralCode?: string } = {
         </div>
         <button className="hk-primary" type="submit" disabled={loading}>Sign Up</button>
       </form>
-      <SecurityVerify open={verifyOpen} onClose={() => setVerifyOpen(false)} onVerified={() => { setVerifyOpen(false); void sendOtp(); }} />
+      <SecurityVerify open={verifyOpen} onClose={() => setVerifyOpen(false)} onVerified={(token) => { setVerifyOpen(false); void sendOtp(token); }} />
       {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading...</span></div></div>}
     </main>
   );
