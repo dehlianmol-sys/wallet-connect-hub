@@ -910,3 +910,60 @@ button,
   0% { background-position: 100% 50%; }
   100% { background-position: 0 50%; }
 }
+
+/* COME PAY auth screens — pixel spec overrides */
+.hk-auth {
+  --bg-page:#F3F6FB; --border-input:#D6E6E3; --border-focus:#12905F; --border-error:#F28B8B;
+  --primary:#12905F; --primary-link:#1B8A57; --primary-soft:#7FC4A6; --check-green:#5CC25C;
+  --hk-primary:#12905F;
+  max-width:385px; background:var(--bg-page); box-shadow:none !important;
+  font-family:"Source Sans 3","Source Sans Pro",sans-serif;
+}
+.hk-auth.hk-login-page { padding:76px 0 60px; }
+.hk-auth .hk-brand img { width:184px; height:184px; object-fit:contain; background:#fff; }
+.hk-auth .hk-login-form, .hk-auth .hk-auth-form { width:274px; }
+.hk-auth .hk-login-form { margin-top:57px; }
+.hk-auth .hk-auth-form { margin-top:13px; }
+.hk-auth.hk-login-page .hk-fields { gap:15px; }
+.hk-auth.hk-auth-form-page .hk-fields { gap:14px; }
+.hk-auth .hk-input-shell { box-sizing:border-box; height:46px; min-height:46px; gap:18px; padding:0 12px 0 20px; border:1px solid var(--border-input); border-radius:9999px; background:#fff; box-shadow:none; }
+.hk-auth .hk-input-shell:focus-within { border-color:var(--border-focus); box-shadow:none; }
+.hk-auth .hk-input-shell.cp-invalid, .hk-auth .hk-input-shell.cp-invalid:focus-within { border-color:var(--border-error); }
+.hk-auth .hk-field-icon { color:#12905F; stroke-width:1.6; }
+.hk-auth.hk-login-page .hk-field-icon, .hk-auth.hk-login-page .hk-input-shell:focus-within .hk-field-icon { color:#2B2B2B; }
+.hk-auth .hk-input-shell input { height:44px; color:#1F1F1F; font-family:inherit; font-size:17px; font-weight:400; }
+.hk-auth .hk-input-shell input::placeholder { color:#8D97A5; font-weight:400; }
+.hk-auth.hk-login-page .hk-input-shell input { font-size:20px; font-weight:600; }
+.hk-auth.hk-login-page .hk-input-shell input::placeholder { color:#BFC4CC; font-weight:700; }
+.hk-auth.hk-login-page .hk-input-shell input[type=password]:not(:placeholder-shown) { letter-spacing:10px; }
+.hk-auth .hk-prefix { margin-right:-8px; padding-right:10px; border-right:0; position:relative; color:#12905F; font-size:16px; font-weight:700; }
+.hk-auth .hk-prefix::after { content:""; position:absolute; right:0; top:50%; width:1px; height:18px; transform:translateY(-50%); background:#D6E6E3; }
+.hk-auth .hk-otp-shell { gap:18px; }
+.hk-auth .hk-send, .hk-auth .hk-auth-form .hk-send { width:66px; min-width:66px; height:30px; min-height:30px; padding:0; border-radius:6px; background:var(--primary-soft); color:#fff; font-family:inherit; font-size:16px; font-weight:700; opacity:1; pointer-events:none; }
+.hk-auth .hk-send.cp-ready, .hk-auth .hk-auth-form .hk-send.cp-ready { background:var(--primary); pointer-events:auto; cursor:pointer; }
+.hk-auth .hk-send:disabled { opacity:1; }
+.cp-hints { margin:8px 0 0; padding:0 0 0 10px; list-style:none; display:grid; gap:4px; font-size:14px; line-height:1.25; }
+.cp-hints li { display:flex; align-items:center; gap:10px; }
+.cp-hints li::before { content:""; width:6px; height:6px; border-radius:50%; background:currentColor; transform:scale(.6); }
+.cp-hints .ok { color:#1B8A57; } .cp-hints .bad { color:#F4A0A0; }
+.hk-auth .hk-options { height:24px; margin-top:15px; padding-left:4px; font-size:15px; color:var(--primary-link); }
+.hk-auth .hk-options a, .hk-auth .hk-forgot a, .hk-auth .hk-agreement span { color:var(--primary-link); text-decoration:underline; text-underline-offset:2px; }
+.hk-auth a:active, .hk-auth label:active { opacity:.7; }
+.hk-auth .hk-options label, .hk-auth .hk-agreement { gap:6px; min-height:20px; cursor:pointer; }
+.hk-auth .hk-options input, .hk-auth .hk-agreement input { width:16px; height:16px; flex:0 0 16px; border:1.5px solid #BFC4CC; background:transparent; }
+.hk-auth .hk-options input:checked, .hk-auth .hk-agreement input:checked { border-color:var(--check-green); background:var(--check-green); }
+.hk-auth .hk-options input:checked::after, .hk-auth .hk-agreement input:checked::after { width:7px; height:3.5px; margin:3.5px 0 0 3px; }
+.hk-auth .hk-agreement { height:20px; margin-top:28px; font-size:15px; color:var(--primary-link); }
+.hk-auth .hk-primary { display:grid; place-items:center; width:271px; height:46px; min-height:46px; margin:10px auto 0; padding:0; border-radius:9999px; background:var(--primary); color:#fff; font-family:inherit; font-size:20px; font-weight:700; box-shadow:0 3px 0 #E3E7EC; }
+.hk-auth .hk-primary:active { opacity:.9; transform:translateY(1px); box-shadow:0 3px 0 #E3E7EC; }
+.hk-auth .hk-primary:disabled { opacity:1; }
+.hk-auth.hk-auth-form-page .hk-primary { margin-top:18px; }
+.hk-auth.hk-auth-form-page .hk-fields:has(.hk-phone-shell) + .hk-primary { margin-top:30px; }
+.hk-auth .hk-error { font-size:13px; }
+.hk-auth .hk-forgot { margin-top:48px; font-size:15px; }
+.hk-auth .hk-version { right:12px; bottom:12px; color:#9AA0A6; font-size:13px; letter-spacing:1px; }
+.hk-auth .hk-auth-header { height:92px; min-height:92px; box-sizing:border-box; padding:env(safe-area-inset-top,0px) 4px 0; grid-template-columns:48px 1fr 48px; box-shadow:none; border:0; }
+.hk-auth .hk-auth-header h1 { font-size:22px; font-weight:700; color:var(--primary); }
+.hk-auth .hk-auth-back { width:48px; height:48px; margin-left:0; color:var(--primary); }
+.hk-auth .hk-auth-back svg { width:24px; height:24px; stroke-width:2; }
+.cp-spin { width:22px; height:22px; border:2px solid rgb(255 255 255 / 35%); border-top-color:#fff; border-radius:50%; animation:hk-spin .8s linear infinite; }
