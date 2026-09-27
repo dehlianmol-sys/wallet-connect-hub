@@ -15,6 +15,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CustomerServiceRouteImport } from './routes/customer-service'
 import { Route as DepositRouteImport } from './routes/deposit'
 import { Route as DownloadRouteImport } from './routes/download'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MessageRouteImport } from './routes/message'
 import { Route as MineRouteImport } from './routes/mine'
@@ -73,6 +74,11 @@ const DepositRoute = DepositRouteImport.update({
 const DownloadRoute = DownloadRouteImport.update({
   id: '/download',
   path: '/download',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -228,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/customer-service': typeof CustomerServiceRoute
   '/deposit': typeof DepositRoute
   '/download': typeof DownloadRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/message': typeof MessageRoute
   '/mine': typeof MineRoute
@@ -264,6 +271,7 @@ export interface FileRoutesByTo {
   '/customer-service': typeof CustomerServiceRoute
   '/deposit': typeof DepositRoute
   '/download': typeof DownloadRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/message': typeof MessageRoute
   '/mine': typeof MineRoute
@@ -302,6 +310,7 @@ export interface FileRoutesById {
   '/customer-service': typeof CustomerServiceRoute
   '/deposit': typeof DepositRoute
   '/download': typeof DownloadRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/message': typeof MessageRoute
   '/mine': typeof MineRoute
@@ -341,6 +350,7 @@ export interface FileRouteTypes {
     | '/customer-service'
     | '/deposit'
     | '/download'
+    | '/forgot-password'
     | '/login'
     | '/message'
     | '/mine'
@@ -377,6 +387,7 @@ export interface FileRouteTypes {
     | '/customer-service'
     | '/deposit'
     | '/download'
+    | '/forgot-password'
     | '/login'
     | '/message'
     | '/mine'
@@ -414,6 +425,7 @@ export interface FileRouteTypes {
     | '/customer-service'
     | '/deposit'
     | '/download'
+    | '/forgot-password'
     | '/login'
     | '/message'
     | '/mine'
@@ -452,6 +464,7 @@ export interface RootRouteChildren {
   CustomerServiceRoute: typeof CustomerServiceRoute
   DepositRoute: typeof DepositRoute
   DownloadRoute: typeof DownloadRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   MessageRoute: typeof MessageRoute
   MineRoute: typeof MineRoute
@@ -516,6 +529,13 @@ declare module '@tanstack/react-router' {
       path: '/download'
       fullPath: '/download'
       preLoaderRoute: typeof DownloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -757,6 +777,7 @@ const rootRouteChildren: RootRouteChildren = {
   CustomerServiceRoute: CustomerServiceRoute,
   DepositRoute: DepositRoute,
   DownloadRoute: DownloadRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   MessageRoute: MessageRoute,
   MineRoute: MineRoute,
