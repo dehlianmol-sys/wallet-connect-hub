@@ -4,6 +4,7 @@ import { useStore } from '@/lib/store';
 import { useToast } from '@/lib/toast';
 import { APP_LOGO, APP_LOGO_FALLBACK } from '@/lib/brand';
 import AppSplash from '@/components/AppSplash';
+import CachedImage from '@/components/CachedImage';
 import AuthHints, { phoneRules, passwordRules, isInvalid } from '@/components/AuthHints';
 
 export default function Login({ showSplash = false }: { showSplash?: boolean }) {
@@ -49,8 +50,8 @@ export default function Login({ showSplash = false }: { showSplash?: boolean }) 
 
   return (
     <main className="hk-auth hk-login-page">
-      <h1 className="sr-only">Sign In to COME PAY</h1>
-      <div className="hk-brand"><img src="/brand/comepay-logo.png" alt="COME PAY" /></div>
+      <h1 className="sr-only">Sign In to Skypay</h1>
+      <div className="hk-brand"><CachedImage src={APP_LOGO} fallbackSrc={APP_LOGO_FALLBACK} cacheKey="app-logo-v2" alt="Skypay" /></div>
       <form className="hk-login-form" onSubmit={submit} noValidate>
         <div className="hk-fields">
           <div>
