@@ -30,7 +30,7 @@ export default function ResetPassword() {
   const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
   const [sentOtp, setSentOtp] = useState('');
-  const [status, setStatus] = useState('');
+  const [, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
