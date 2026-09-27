@@ -6,10 +6,10 @@ export const Route = createFileRoute('/forgot-password')({
   ssr: false,
   head: () => ({
     meta: [
-      { title: 'Reset Password — COME PAY' },
-      { name: 'description', content: 'Reset your COME PAY account password.' },
-      { property: 'og:title', content: 'Reset Password — COME PAY' },
-      { property: 'og:description', content: 'Reset your COME PAY account password.' },
+      { title: 'Reset Password — Skypay' },
+      { name: 'description', content: 'Reset your Skypay account password.' },
+      { property: 'og:title', content: 'Reset Password — Skypay' },
+      { property: 'og:description', content: 'Reset your Skypay account password.' },
       { property: 'og:type', content: 'website' },
       { name: 'twitter:card', content: 'summary_large_image' },
     ],
