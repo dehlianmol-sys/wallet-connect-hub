@@ -16,6 +16,7 @@ export default function Login({ showSplash = false }: { showSplash?: boolean }) 
   const [remember, setRemember] = useState(true);
   const [agreed, setAgreed] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
   const [error, setError] = useState('');
   const [splash, setSplash] = useState(showSplash);
 
@@ -38,8 +39,8 @@ export default function Login({ showSplash = false }: { showSplash?: boolean }) 
     try {
       const result = await login(digits, password);
       if (!result.ok || !result.user) return setError(result.message);
-      toast('Sign in successful', 'success');
-      await new Promise((resolve) => window.setTimeout(resolve, 850));
+      setSignedIn(true);
+      await new Promise((resolve) => window.setTimeout(resolve, 1000));
       navigate(result.user.role === 'user' ? '/' : '/admin');
     } finally {
       setLoading(false);
@@ -80,7 +81,14 @@ export default function Login({ showSplash = false }: { showSplash?: boolean }) 
         <div className="hk-forgot"><Link to="/forgot-password">Forget Password</Link></div>
       </form>
       <span className="hk-version">v1.2.1</span>
-      {loading && <div className="hk-loading-overlay"><div className="hk-loading-box"><span className="hk-mini-spinner" /><span>Loading...</span></div></div>}
+       {signedIn && (
+         <div className="hk-signin-result-layer" role="status" aria-live="polite">
+           <div className="hk-signin-result">
+             <svg viewBox="0 0 96 72" aria-hidden="true"><path d="M10 36 37 62 86 10" /></svg>
+             <span>Signed in</span>
+           </div>
+         </div>
+       )}
     </main>
   );
 }

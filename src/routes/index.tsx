@@ -35,23 +35,6 @@ export const Route = createFileRoute("/")({
   component: RootEntry,
 });
 
-// Plays once per app session: a fresh launch (app not in recents) shows it,
-// while in-app navigation, back presses and WebView reloads never replay it.
-const SPLASH_KEY = "hk_splash_seen";
-const splashSeen = () => {
-  try {
-    return sessionStorage.getItem(SPLASH_KEY) === "1";
-  } catch {
-    return false;
-  }
-};
-const markSplashSeen = () => {
-  try {
-    sessionStorage.setItem(SPLASH_KEY, "1");
-  } catch {
-    /* private mode: splash just won't persist */
-  }
-};
 function RootEntry() {
   // install.skypaytop.cyou always shows the APK download page.
   if (isInstallHost()) {
@@ -63,7 +46,7 @@ function RootEntry() {
 
 function AppEntry() {
   const { currentUser, loading } = useStore();
-  const [startupSplash, setStartupSplash] = useState(() => !splashSeen());
+  const [startupSplash, setStartupSplash] = useState(true);
   const [timeDone, setTimeDone] = useState(false);
 
   const finishSplash = useCallback(() => {
@@ -72,23 +55,13 @@ function AppEntry() {
 
   useEffect(() => {
     if (startupSplash && timeDone && !loading) {
-      markSplashSeen();
       setStartupSplash(false);
     }
   }, [startupSplash, timeDone, loading]);
 
   if (startupSplash) return <AppSplash onFinish={finishSplash} />;
 
-  if (loading) {
-    return (
-      <div style={{ position: "fixed", inset: 0, display: "grid", placeItems: "center", background: "rgba(0,0,0,.82)" }} role="status">
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-          <span className="animate-spin" style={{ width: 34, height: 34, border: "3px solid rgba(255,255,255,.25)", borderTopColor: "#fff", borderRadius: "50%" }} />
-          <span style={{ color: "#f2f4f5", fontSize: 13 }}>Loading…</span>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <AppSplash />;
 
 
 

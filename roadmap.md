@@ -29,3 +29,4 @@
 - [x] Apply Roboto consistently across user-facing screens.
 - [x] Shorten cold-start loading and remove the extra startup delay.
 - [x] Reuse centrally loaded banners and reduce avoidable rerenders.
+- [x] Replace duplicate sign-in loading with one confirmation and restore the animated launch screen.
