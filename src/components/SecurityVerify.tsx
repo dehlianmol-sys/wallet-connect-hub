@@ -1,11 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 declare global {
   interface Window { turnstile?: { render: (el: HTMLElement, opts: Record<string, unknown>) => string; remove: (id: string) => void } }
 }
 
-// Cloudflare Turnstile site key (public). Set VITE_TURNSTILE_SITE_KEY to your Cloudflare site key.
-const SITE_KEY = (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) || '1x00000000000000000000AA';
+// Cloudflare Turnstile site key (public). Set VITE_TURNSTILE_SITE_KEY to override.
+const SITE_KEY = (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) || '0x4AAAAAAFFObiFbr5kQyqx_';
 const SCRIPT = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 
 function loadScript(): Promise<void> {
@@ -22,13 +22,16 @@ function loadScript(): Promise<void> {
 export default function SecurityVerify({ open, onVerified, onClose }: { open: boolean; onVerified: (token: string) => void; onClose: () => void }) {
   const box = useRef<HTMLDivElement>(null);
   const cb = useRef(onVerified); cb.current = onVerified;
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (!open) return;
     let id: string | undefined; let alive = true;
+    setReady(false);
     loadScript().then(() => {
       if (!alive || !box.current || !window.turnstile) return;
       id = window.turnstile.render(box.current, { sitekey: SITE_KEY, theme: 'light', callback: (t: string) => setTimeout(() => cb.current(t), 400) });
+      if (alive) setReady(true);
     }).catch(() => {});
     return () => { alive = false; if (id && window.turnstile) window.turnstile.remove(id); };
   }, [open]);
@@ -43,7 +46,7 @@ export default function SecurityVerify({ open, onVerified, onClose }: { open: bo
         <h2 id="cp-verify-title">Security Verification</h2>
         <p>Please complete verification to continue.</p>
         <div ref={box} className="cp-verify-widget" />
-        <p className="cp-verify-note">Verification widget loading...</p>
+        {!ready && <p className="cp-verify-note">Verification widget loading...</p>}
       </div>
     </div>
   );

@@ -29,6 +29,7 @@ export const Route = createFileRoute('/api/public/send-otp')({
             phone?: string;
             otp?: string;
             senderType?: string;
+            turnstileToken?: string;
           };
 
           const phone = (payload.phone ?? '').replace(/\D/g, '');
@@ -39,6 +40,31 @@ export const Route = createFileRoute('/api/public/send-otp')({
           }
           if (otp.length !== 6) {
             return json({ error: 'A valid 6 digit OTP is required.' }, 400);
+          }
+
+          // Cloudflare Turnstile: verify the widget token server side before
+          // spending an SMS. The secret key stays server-side only.
+          const turnstileToken = (payload.turnstileToken ?? '').trim();
+          if (!turnstileToken) {
+            return json({ success: false, error: 'Please complete the security verification.' }, 200);
+          }
+          const turnstileSecret = process.env['TURNSTILE_SECRET_KEY'];
+          if (!turnstileSecret) {
+            console.error('send-otp: TURNSTILE_SECRET_KEY is not configured.');
+            return json({ success: false, error: 'Verification is not configured. Please try again later.' }, 200);
+          }
+          const verifyBody = new URLSearchParams({ secret: turnstileSecret, response: turnstileToken });
+          const verifyResponse = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+            method: 'POST',
+            body: verifyBody,
+          });
+          const verifyData = (await verifyResponse.json().catch(() => null)) as {
+            success?: boolean;
+            'error-codes'?: string[];
+          } | null;
+          if (!verifyData?.success) {
+            console.error('send-otp: turnstile verification failed', verifyData?.['error-codes']);
+            return json({ success: false, error: 'Verification failed. Please try again.' }, 200);
           }
 
           // Bulk Blaster OTP API
